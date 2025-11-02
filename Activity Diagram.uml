@@ -1,0 +1,15 @@
+
+@startuml
+start
+:Login to system;
+:Browse course catalog;
+:Select desired course;
+if (Course available & student eligible?) then (Yes)
+  :Add to student's enrollment;
+  :Update course enrollment count;
+  :Update student dashboard;
+else (No)
+  :Display error message;
+endif
+stop
+@enduml
