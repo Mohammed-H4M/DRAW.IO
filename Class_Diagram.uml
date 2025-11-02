@@ -1,0 +1,122 @@
+@startuml SkillForge_Class_Diagram
+
+' Abstract class
+abstract class User {
+    - userID : int
+    - username : string
+    - email : string
+    - password : string
+    + login()
+    + logout()
+}
+
+' Subclasses
+class Student {
+    - enrolledCourses : List<Course>
+    - completedCourses : List<Course>
+    - certificates : List<Certificate>
+    + enrollCourse()
+    + completeLesson()
+    + takeQuiz()
+    + viewCertificate()
+}
+
+class Instructor {
+    - createdCourses : List<Course>
+    + createCourse()
+    + uploadLesson()
+    + designQuiz()
+}
+
+class Admin {
+    + manageUsers()
+    + approveCourse()
+    + removeCourse()
+    + viewAnalytics()
+}
+
+' Course-related classes
+class Course {
+    - courseID : int
+    - title : string
+    - description : string
+    - lessons : List<Lesson>
+    - quizzes : List<Quiz>
+    + addLesson()
+    + addQuiz()
+    + assignInstructor()
+}
+
+class Lesson {
+    - lessonID : int
+    - title : string
+    - content : string
+    - resources : string
+}
+
+class Quiz {
+    - quizID : int
+    - questions : List<Question>
+    + evaluate()
+}
+
+class Question {
+    - questionText : string
+    - options : List<string>
+    - correctAnswer : string
+    + checkAnswer()
+}
+
+class Certificate {
+    - certificateID : int
+    - issueDate : Date
+    - student : Student
+    - course : Course
+    + generateCertificate()
+}
+
+class Analytics {
+    - student : Student
+    - completedCourses : int
+    - timeSpent : float
+    - quizGrades : Map<Course, float>
+    + updateStats()
+    + generateReport()
+}
+
+class JsonDatabaseManager {
+    + loadData()
+    + saveData()
+    + updateData()
+}
+
+class UserService {
+    + manageUserData()
+}
+
+class CourseService {
+    + manageCourseData()
+}
+
+class QuizService {
+    + manageQuizData()
+}
+
+' Relationships
+User <|-- Student
+User <|-- Instructor
+User <|-- Admin
+
+Instructor "1" --> "*" Course : creates
+Course "1" --> "*" Lesson : contains
+Course "1" --> "*" Quiz : contains
+Quiz "1" o-- "*" Question : includes
+Student "*" -- "*" Course : enrolls
+Student "1" --> "*" Certificate : earns
+Certificate "*" --> "1" Course
+Student "1" --> "1" Analytics : tracked
+JsonDatabaseManager <.. UserService
+JsonDatabaseManager <.. CourseService
+JsonDatabaseManager <.. QuizService
+
+@enduml
